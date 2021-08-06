@@ -7,10 +7,18 @@
     "tape": "^4.6.3",
     "underscore": "^1.8.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^4.13.1",
+    "jest": "^22.0.3",
+    "node-fetch": "^2.6.1",
+    "prompt-sync": "^4.2.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --collectCoverage=false tests.js"
   },
   "author": "Cristian Tralice",
-  "license": "MIT"
+  "license": "MIT",
+  "jest": {
+    "testURL": "http://localhost/"
+  }
 }

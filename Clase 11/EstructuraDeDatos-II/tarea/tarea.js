@@ -10,11 +10,68 @@
 // search: Busca un valor dentro de la lista. Puede recibir un valor o una función. Si no hubiera resultados, devuelve null.
 
 function LinkedList() {
+  this.head = null;
+  this._length = 0;
 
+  this.add = function (data) {
+    let node = new Node(data);
+    let current = this.head;
+    if (!current) {
+      this.head = node;
+      this._length++;
+      return node;
+    }
+    while (current.next) {
+      current = current.next
+    }
+    current.next = node;
+    this._length++;
+    return node;
+  }
+
+  this.remove = function () {
+    let data;
+    if (this._length === 0) return null;
+    if (this._length === 1) {
+      data = this.head.value;
+      this.head = null
+      this._length--;
+      return data;
+    }
+    let current = this.head;
+    while (current.next.next) {
+      current = current.next;
+    }
+    data = current.next.value;
+    current.next = null;
+    this._length--;
+    return data;
+  }
+
+  this.search = function (value) {
+    let current = this.head;
+
+    if (typeof value === 'function') {
+      if (value(current.value)) return current.value;
+      while (current.next) {
+        current = current.next;
+        if (value(current.value)) return current.value;
+      }
+      return null;
+    } else {
+      if (current.value == value) return current.value;
+      while (current.next) {
+        current = current.next;
+        if (current.value == value) return current.value;
+      }
+      return null;
+    }
+  }
 }
 
-function Node(value){
-
+function Node(value) {
+  this.value = value;
+  this.next = null;
 }
 
 // Hash Table
@@ -28,6 +85,55 @@ function Node(value){
 //    - Devolver el valor.
 
 function HashTable() {
+  this.numBuckets = 35;
+  let table = {}
+
+  this.set = function (key, val) {
+    let item = { key, val }
+    let hashKey = this.hash(key);
+    let exist = table[hashKey];
+    if (exist) {
+      let found = exist.find(e => e.key === key);
+      if (found && found.key === key) {
+        let index = exist.findIndex(e => e.key === key);
+        exist[index] = item;
+      }
+      table[hashKey] = [...table[hashKey], item];
+    } else {
+      table[this.hash(key)] = [item];
+    }
+
+  }
+  this.get = function (key) {
+    let hashKey = this.hash(key);
+    let exist = table[hashKey];
+    if (exist) {
+      let found = table[hashKey].find(e => e.key === key);
+      return found.val;
+    } else {
+
+    }
+
+  }
+  this.hasKey = function (key) {
+    let hashKey = this.hash(key);
+    let exist = table[hashKey];
+    if (exist) {
+      let found = table[hashKey].find(e => e.key === key);
+      return !!found;
+    } else {
+      return false;
+    }
+
+  }
+
+  this.hash = function (value) {
+    let num = value.split('')
+      .map(s => s.charCodeAt(0))
+      .reduce((acc, curr) => acc + curr, 0);
+    let key = num % this.numBuckets;
+    return key;
+  }
 
 }
 
